@@ -10,6 +10,7 @@ const {
 let todayWindow;
 let createWindow;
 let listWindow;
+let aboutWindow;
 
 
 app.on("ready", () => {
@@ -60,9 +61,37 @@ const createWindowCreator = () => {
     createWindow.on("closed", () => (createWindow = null))
 };
 
+const aboutWindowCreator = () => {
+    aboutWindow = new BrowserWindow({
+        webPreferences: {
+            nodeIntegration: true
+        },
+        width: 600,
+        height: 400,
+        title: "about"
+    });
+
+    aboutWindow.setMenu(null);
+    aboutWindow.loadURL(`file://${__dirname}/about.html`);
+    aboutWindow.on("closed", () => (aboutWindow = null))
+};
+
 ipcMain.on("appointment:create", (event, appointment) => {
     console.log(appointment);
 });
+
+ipcMain.on("appointment:create", (event, appointment) => {
+    console.log(appointment);
+});
+
+ipcMain.on("appointment:request:list", event => {
+    console.log("here");
+});
+
+ipcMain.on("appointment:about", event => {
+    console.log("about");
+});
+
 
 const menuTemplate = [{
         label: "File",
@@ -92,5 +121,11 @@ const menuTemplate = [{
     {
         label: "View",
         submenu: [{ role: "reload" }, { role: "toggledevtools" }]
+    },
+    {
+        label: "about",
+        click() {
+            aboutWindowCreator();
+        }
     }
 ]

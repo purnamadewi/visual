@@ -4,7 +4,55 @@
 </head>
 
 <body>
-    Ini Halaman List HTML
+    <h1>List Window</h1>
+    <div id="list"></div>
 </body>
+<script>
+    const electron = require("electron");
+    const {
+        ipcRenderer
+    } = electron;
+    ipcRenderer.send("appointment:request:list");
+
+    ipcRenderer.on("appointment:request:List"), (event, appointments) => {
+        const listDiv = Document.getElementById("List")
+        appointments.forEach(appointment => {
+            const appointmentDiv = document.createElement("div");
+            const nameParagraph = document.createElement("p");
+            nameParagraph.innerHTML = 'Name: ${appointment.name}';
+
+            const numberParagraph = document.createElement("p");
+            numberParagraph.innerHTML = 'Phone Number: ${appointment.number}';
+
+            const numberParagraph = document.createElement("p");
+            numberParagraph.innerHTML = 'Phone Number: ${appointment.number}';
+
+            const dateParagraph = document.createElement("p");
+            dateParagraph.innerHTML = 'Date: ${appointment.date}';
+
+            const hourParagraph = document.createElement("p");
+            hourParagraph.innerHTML = 'Hour: ${appointment.hour}';
+
+            const symptomsParagraph = document.createElement("p");
+            symptomsParagraph.innerHTML = 'Symptoms: ${appointment.symptoms}';
+
+            const doneParagraph = document.createElement("p");
+            doneParagraph.innerHTML = 'Done: ${appointment.done ? "Yes" : "No"}';
+
+            const hr = document.createElement("hr");
+
+            appointmentsDiv.appendChild(nameParagraph);
+            appointmentsDiv.appendChild(numberParagraph);
+            appointmentsDiv.appendChild(dateParagraph);
+            appointmentsDiv.appendChild(hourParagraph);
+            appointmentsDiv.appendChild(symptomsParagraph);
+            appointmentsDiv.appendChild(doneParagraph);
+            appointmentsDiv.appendChild(hr);
+
+            listDiv.append(appointmentsDiv);
+
+        });
+    }
+</script>
 
 </html>
