@@ -1,0 +1,69 @@
+<html>
+
+<head>
+</head>
+
+<body style="font-family: Lucida Sans Regular; background-color: cyan;">
+    <h1 style="text-align: center; background-color: whitesmoke;">Data Penyewaan Mobil</h1>
+    <div id="listdata"></div>
+
+</body>
+
+<script>
+    const electron = require("electron");
+    const {
+        ipcRenderer
+    } = electron;
+    ipcRenderer.send("rentalcar:request:listdata");
+
+    ipcRenderer.on("rentalcar:response:listdata", (event, rentalcar) => {
+        const listdataDiv = document.getElementById("listdata");
+        rentalcar.forEach(rentalcar => {
+            const rentalcarDiv = document.createElement("div");
+
+            const nameParagraph = document.createElement("p");
+            nameParagraph.innerHTML = `Name: ${rentalcar.name}`;
+
+            const number1Paragraph = document.createElement("p");
+            number1Paragraph.innerHTML = `KTP Number: ${rentalcar.number1}`;
+
+            const alamatParagraph = document.createElement("p");
+            alamatParagraph.innerHTML = `Alamat: ${rentalcar.alamat}`;
+
+            const number2Paragraph = document.createElement("p");
+            number2Paragraph.innerHTML = `Phone Number: ${rentalcar.number2}`;
+
+            const mobilParagraph = document.createElement("p");
+            mobilParagraph.innerHTML = `Jenis Mobil: ${rentalcar.mobil}`;
+
+            const date1Paragraph = document.createElement("p");
+            date1Paragraph.innerHTML = `Tanggal Sewa: ${rentalcar.date1}`;
+
+            const date2Paragraph = document.createElement("p");
+            date2Paragraph.innerHTML = `Tanggal Kembali: ${rentalcar.date2}`;
+
+            const hourParagraph = document.createElement("p");
+            hourParagraph.innerHTML = `Hour: ${rentalcar.hour}`;
+
+            const doneParagraph = document.createElement("p");
+            doneParagraph.innerHTML = `Done: ${rentalcar.done ? "Yes" : "No"}`;
+
+            const hr = document.createElement("hr");
+
+            rentalcarDiv.appendChild(nameParagraph);
+            rentalcarDiv.appendChild(number1Paragraph);
+            rentalcarDiv.appendChild(alamatParagraph);
+            rentalcarDiv.appendChild(number2Paragraph);
+            rentalcarDiv.appendChild(mobilParagraph);
+            rentalcarDiv.appendChild(date1Paragraph);
+            rentalcarDiv.appendChild(date2Paragraph);
+            rentalcarDiv.appendChild(hourParagraph);
+            rentalcarDiv.appendChild(doneParagraph);
+            rentalcarDiv.appendChild(hr);
+
+            listdataDiv.append(rentalcarDiv);
+        });
+    });
+</script>
+
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Rental Mobil Online</title>
+</head>
+
+<body style="padding-left:5%; font-family: 'Lucida Sans'; background-color: black; color: cornsilk;">
+    <h1 style="text-align: justify; background-color: darkblue;">Form Penyewaan Mobil</h1>
+    <div id="listdata"></div>
+
+    <form id="form">
+        <fieldset style="background-color: rgb(4, 4, 139); border: 0px;">
+            <label for="name">Name:</label><br />
+            <input type="text" name="name" required />
+            <br /><br />
+            <label for="number1"> KTP:</label><br />
+            <input type="number" name="number1" required />
+            <br /><br />
+            <label for="alamat">Alamat:</label><br />
+            <input type="text" name="alamat" required />
+            <br /><br />
+            <label for="number2">Phone Number:</label><br />
+            <input type="number" name="number2" required />
+            <br /><br />
+            <label for="mobil">Jenis Mobil:</label>
+            <select name="mobil">
+            <option value ="Sedan">Sedan</option>
+            <option value ="Minivan">Minivan</option>
+            <option value ="Toyota">Toyota</option>
+        </select>
+            <br /><br />
+            <label for="date1">Tanggal Sewa:</label><br />
+            <input type="date" name="date1" placeholder="YYY-MM-DO" required/>
+            <br /><br />
+            <label for="date2">Tanggal Kembali:</label><br />
+            <input type="date" name="date2" placeholder="YYY-MM-DO" required/>
+            <br /><br />
+            <label for="hour">Hour:</label><br />
+            <input type="text" name="hour" placeholder="hh:mm" required />
+            <br /><br />
+            <input style="background-color: gray; border: 0cm;" type="submit" />
+        </fieldset>
+    </form>
+
+    <script>
+        const electron = require("electron");
+        const {
+            ipcRenderer
+        } = electron;
+
+        const form = document.getElementById("form");
+        const elements = {};
+
+        form.addEventListener("submit", event => {
+            event.preventDefault();
+
+            for (let i = 0; i < form.elements.length; i++)
+                if (form.elements[i].type !== "submit")
+                    elements[form.elements[i].name] = form.elements[i].value;
+
+            ipcRenderer.send("rentalcar:create", elements);
+        });
+    </script>
+</body>
+
+</html>
