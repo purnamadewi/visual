@@ -1,0 +1,81 @@
+<html>
+
+<head>
+</head>
+
+<body style="margin:5%; font-family: 'Lucida Sans'; background-color: paleturquoise; color: black;">
+    <center>
+        <h1 style=" background-color:powderblue;">Selamat Datang di Car Rental</h1>
+        <img src="https://cirebonmobilrental.com/wp-content/uploads/2018/05/rental-mobil-di-cirebon.png" alt="carRental" width="500px" height="333px">
+    </center>
+    <div id="listdata"></div>
+</body>
+<script>
+    const electron = require("electron");
+    const {
+        ipcRenderer
+    } = electron;
+    ipcRenderer.send("rentalcar:request:file");
+
+    ipcRenderer.on("rentalcar:response:file", (event, rentalcar) => {
+        const listdataDiv = document.getElementById("listdata");
+        listdataDiv.innerHTML="";
+        rentalcar.forEach(rentalcar => {
+            const rentalcarDiv = document.createElement("div");
+
+            const nameParagraph = document.createElement("p");
+            nameParagraph.innerHTML = `Name: ${rentalcar.name}`;
+
+            const number1Paragraph = document.createElement("p");
+            number1Paragraph.innerHTML = `KTP Number: ${rentalcar.number1}`;
+
+            const alamatParagraph = document.createElement("p");
+            alamatParagraph.innerHTML = `Alamat: ${rentalcar.alamat}`;
+
+            const number2Paragraph = document.createElement("p");
+            number2Paragraph.innerHTML = `Phone Number: ${rentalcar.number2}`;
+
+            const mobilParagraph = document.createElement("p");
+            mobilParagraph.innerHTML = `Jenis Mobil: ${rentalcar.mobil}`;
+
+            const date1Paragraph = document.createElement("p");
+            date1Paragraph.innerHTML = `Tanggal Sewa: ${rentalcar.date1}`;
+
+            const date2Paragraph = document.createElement("p");
+            date2Paragraph.innerHTML = `Tanggal Kembali: ${rentalcar.date2}`;
+
+            const hourParagraph = document.createElement("p");
+            hourParagraph.innerHTML = `Hour: ${rentalcar.hour}`;
+
+            const doneParagraph = document.createElement("p");
+            doneParagraph.innerHTML = `Done: ${rentalcar.done ? "Yes" : "No"}`;
+
+            const doneButton = document.createElement("button");
+            doneButton.innerHTML = "Done";
+            doneButton.disabled = rentalcar.done ? true : false;
+            doneButton.onclick = () => done(rentalcar.id);
+
+            const hr = document.createElement("hr");
+
+            rentalcarDiv.appendChild(nameParagraph);
+            rentalcarDiv.appendChild(number1Paragraph);
+            rentalcarDiv.appendChild(alamatParagraph);
+            rentalcarDiv.appendChild(number2Paragraph);
+            rentalcarDiv.appendChild(mobilParagraph);
+            rentalcarDiv.appendChild(date1Paragraph);
+            rentalcarDiv.appendChild(date2Paragraph);
+            rentalcarDiv.appendChild(hourParagraph);
+            rentalcarDiv.appendChild(doneParagraph);
+            rentalcarDiv.appendChild(doneButton);
+            rentalcarDiv.appendChild(hr);
+
+            listdataDiv.append(rentalcarDiv);
+
+        });
+    });
+    const done = id => {
+        ipcRenderer.send("rentalcar:done", id);
+    }
+</script>
+
+</html>
